@@ -11,6 +11,7 @@ class UI:
         self.value1 = 0
         self.value2 = 0
         self.ans = 0
+        self.timesToCalculate = 100
 
 
     def Run(self):
@@ -50,19 +51,25 @@ class UI:
         if (self.value2 == 0 and self.operator == "/"): # Handle errors in case the user tries to divide by zero.
             print("Error: Can't divide by zero.")
         else:
-            startTime = time.perf_counter()
-            self.ans = self.calculator.Calculate(self.value1, self.value2, self.operator)
-            endTime = time.perf_counter()
-            deltaTime = endTime - startTime
-            print(f"{self.value1} {self.operator} {self.value2} = {self.ans}\n")
-            print(f"Time to calculate: {deltaTime}\n")
+            totalTime = 0
+
+            for i in range(self.timesToCalculate):
+                startTime = time.perf_counter()
+                self.ans = self.calculator.Calculate(self.value1, self.value2, self.operator)
+                endTime = time.perf_counter()
+                elapsed = endTime - startTime
+                totalTime += elapsed
+        
+        averageTime = totalTime / self.timesToCalculate
+        print(f"{self.value1} {self.operator} {self.value2} = {self.ans}\n")
+        print(f"\nPerformed operation {self.timesToCalculate} times. Average time: {averageTime} seconds ({averageTime * 1000} milliseconds).\n")
         
 
     def SplitString(self, input_:str):
         parts = input_.split(" ")
         #  -- Before splitting --
         #  Format: number1 operator number2
-        #  Example: 526 + 141
+        #  Example: "526 + 141"
         #
         #  -- After splitting --
         #    [0]       [1]        [2]
